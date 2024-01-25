@@ -11,13 +11,17 @@ services:
       - ./proxy/conf/:/etc/nginx/conf.d/:ro
       - ./certbot/www/:/var/www/certbot/:ro
       - ./certbot/conf/:/etc/nginx/ssl/:ro
+    networks: 
+      - proxy-net
 
   certbot: 
     image: certbot/certbot:latest
     volumes: 
       - ./certbot/www/:/var/www/certbot/:rw
       - ./certbot/conf/:/etc/letsencrypt/:rw
+    networks:
+      - proxy-net
 
-  server:
-    image: nginx:latest
-    hostname: server
+networks:
+  proxy-net:
+    driver: bridge
